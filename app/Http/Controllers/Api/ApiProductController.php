@@ -6,6 +6,7 @@ use App\Customer;
 use App\Http\Controllers\Controller;
 use App\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ApiProductController extends Controller
 {
@@ -17,7 +18,11 @@ class ApiProductController extends Controller
     public function index($id)
     {
         $customer = Customer::find($id);
+        $customersProducts = $customer->products;
+
         return $customer->products;
+//        return Storage::disk('google')->listContents();
+//        dd(Storage::disk('google')->url('1SRUVSUVKqEGYvmldp--A8wSJiHG5B4Ug'));
     }
 
     public function productList(){

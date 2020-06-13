@@ -5,7 +5,7 @@
         <div class="alert alert-primary" role="alert">
             <div class="row" style="vertical-align: center">
                 <div class="col-3">
-                    <img src="http://pure-inlet-68029.herokuapp.com/images/{{$product->picture}}" width="250">
+                    <img src="{{ \Illuminate\Support\Facades\Storage::disk('google')->url($product->picture) }}" width="250">
                 </div>
                 <div class="col-3" style="margin-top: auto; margin-bottom: auto">
                     <h6>Customer: <br>{{\App\Customer::find($product->customer_id)->first_name}} {{\App\Customer::find($product->customer_id)->last_name}}</h6>

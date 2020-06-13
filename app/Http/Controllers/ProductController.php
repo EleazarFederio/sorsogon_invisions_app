@@ -43,51 +43,44 @@ class ProductController extends Controller
     public function store(Request $request, $id)
     {
         $fileName = null;
-//        return $request;
+        $path = '';
 
         $validator = Validator::make($request->all(), [
             'product_picture' => 'max:5000',
-//            'product_name' => 'required',
             'details' => 'required',
             'quantity' => 'required',
             'price' => 'required',
             'details' => 'required'
-//            'customer' => 'required'
         ]);
 
-//        dd($request->all());
+
 
         if ($validator->passes()){
 
             if($request->product_picture != null){
-                $dataTime = date('Ymd_His');
                 $file = $request->file('product_picture');
-//                dd($file);
-
-                $fileName = $dataTime. '-'.rand(00000000, 99999999).'.jpg';
-                $savePath = public_path("images");
-                Storage::disk('dropbox')->putFileAs('public-upload', $file, $fileName);
-//                dd($savePath);
-                $file->move($savePath, $fileName);
+                Storage::disk('google')->put($fileName, $file);
+                $fileFromGDs = Storage::disk('google')->listContents();
+                foreach ($fileFromGDs as $fileFromGD){
+                    if($fileFromGD['name'] == $file->hashName()){
+                        $path = $fileFromGD['path'];
+                    }
+                }
             }
 
-//            dd($request->quantity);
             $request->request->add(['customer_id' => Customer::find($id)->id]);
-//            dd($request->category);
-//            dd($request->due_date);
-            Product::create([
-                'quantity' => $request->quantity,
-                'price' => $request->price,
-                'details' => $request->details,
-                'customer_id' => $request->customer_id,
-                'category' => $request->category,
-                'due_date' => $request->due_date,
 
-                'status' => $request->status,
-                'picture' => $fileName
-            ]);
-//            dd($fileName);
-//            $customer->products()->save($request->all());
+            $product = new Product();
+            $product->quantity = $request->quantity;
+            $product->price = $request->price;
+            $product->details = $request->details;
+            $product->customer_id = $request->customer_id;
+            $product->category = $request->category;
+            $product->due_date = $request->due_date;
+            $product->status = $request->status;
+            $product->picture = $path;
+            $product->save();
+
             $products = Product::all();
             return back()->with('products', $products);
 
@@ -136,8 +129,7 @@ class ProductController extends Controller
      */
     public function update($id1, $id2, Request $request)
     {
-
-//                return $request;
+        $path = '';
 
         $fileName = null;
 
@@ -148,11 +140,14 @@ class ProductController extends Controller
         if($validator->passes()){
 
             if($request->product_picture != null){
-                $dataTime = date('Ymd_His');
                 $file = $request->file('product_picture');
-                $fileName = $dataTime. '-'.rand(00000000, 99999999).'.jpg';
-                $savePath = public_path('/images/');
-                $file->move($savePath, $fileName);
+                Storage::disk('google')->put($fileName, $file);
+                $fileFromGDs = Storage::disk('google')->listContents();
+                foreach ($fileFromGDs as $fileFromGD){
+                    if($fileFromGD['name'] == $file->hashName()){
+                        $path = $fileFromGD['path'];
+                    }
+                }
             }
 
             $customer = Customer::find($id1);
@@ -164,7 +159,7 @@ class ProductController extends Controller
             $selectedProduct->due_date = $request->due_date;
             $selectedProduct->status = $request->status;
             if ($request->product_picture != ''){
-                $selectedProduct->picture = $fileName;
+                $selectedProduct->picture = $path;
             }
             $selectedProduct->save();
             $customer = Customer::find($id1);

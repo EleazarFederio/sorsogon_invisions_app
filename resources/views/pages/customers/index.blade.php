@@ -140,8 +140,10 @@
                                             var temp = "";
                                             data.forEach((u)=>{
                                                 temp += '<tr>';
+{{--                                                {{ $maskpic = \Illuminate\Support\Facades\Storage::disk('google')->allFiles() }}--}}
+{{--                                                {{ dd($maskpic) }}--}}
                                                 var image_url = u.picture == null ? 'image_not_available.png': u.picture;
-                                                temp += '<td style="margin-bottom: 0px"><img src="http://pure-inlet-68029.herokuapp.com/images/'+image_url+'" width="200"><span data-countdown="'+u.due_date+'"></span></td>';
+                                                temp += '<td style="margin-bottom: 0px"><img src="https://drive.google.com/uc?id='+u.picture+'&export=media" width="200"><span data-countdown="'+u.due_date+'"></span></td>';
                                                 temp += '<td><center><a href="{{url('')}}/customers/{{$customer->id}}/products/'+u.id+'" class="btn btn-primary btn-sm"><i class="fas fa-chart-area"></i></a></center></td>';
                                                 temp += '<td><center><p style="margin-bottom: 0px">Quantity</p><p>'+u.quantity+'</p></center></td>';
                                                 temp += '<td><center><p style="margin-bottom: 0px">Price</p><p>₱ '+u.price+'</p></center></td>';
@@ -181,7 +183,7 @@
                                     $('#category').val(data.product.category);
                                     $('#status').val(data.product.status);
                                     $('#due_date').val(data.product.due_date);
-                                    var preview_image_url = data.product.picture  == null ? 'image_not_available.png' : data.product.picture;
+                                    var preview_image_url = data.product.picture  == null ? 'image_not_available.png' : 'https://drive.google.com/uc?id='+data.product.picture+'&export=media';
                                     $('#productPic2').attr('src', 'http://pure-inlet-68029.herokuapp.com/images/'+preview_image_url);
                                 },
                             });
@@ -450,8 +452,8 @@
 
         $(document).on('click', '.editModalShow', function () {
             var id = $(this).attr('id');
-            var route = "http://pure-inlet-68029.herokuapp.com/api/customers/"+id;
-            var updateRoute = "http://pure-inlet-68029.herokuapp.com/customers/"+id;
+            var route = "http://127.0.0.1:8000/api/customers/"+id;
+            var updateRoute = "http://127.0.0.1:8000/customers/"+id;
             $('#editForm').attr('action', updateRoute);
 
             $.ajax({
