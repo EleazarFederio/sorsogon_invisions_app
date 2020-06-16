@@ -1,0 +1,26 @@
+runtime: php
+env: flex
+
+runtime_config:
+  document_root: public
+
+# Ensure we skip ".env", which is only for local development
+skip_files:
+  - .env
+
+env_variables:
+  # Put production environment variables here.
+  APP_LOG: errorlog
+  APP_KEY: base64:l+0tUcgNdNQCDeXM8HbmGEu4o2PzbaXtAEy6YUg83Ko=
+  CACHE_DRIVER: database
+  SESSION_DRIVER: database
+  DB_CONNECTION: mysql
+  DB_HOST: 127.0.0.1
+  DB_PORT: 3306
+  DB_DATABASE: invisions
+  DB_USERNAME: invasionz
+  DB_PASSWORD: CvAP4ItidesKoOcE
+  DB_SOCKET: "/cloudsql/innate-buckeye-279911:us-central1:invasionzdbapp"
+
+beta_settings:
+  cloud_sql_instances: "innate-buckeye-279911:us-central1:invasionzdbapp"
